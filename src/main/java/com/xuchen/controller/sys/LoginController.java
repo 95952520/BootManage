@@ -34,9 +34,9 @@ public class LoginController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
-    String welcome() {
-        return "welcome";
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
+    String main() {
+        return "main";
     }
 
     @RequestMapping(value = "/error", method = RequestMethod.GET)

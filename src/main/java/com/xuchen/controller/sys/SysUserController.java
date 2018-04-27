@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.xuchen.base.BaseQuery;
 import com.xuchen.base.Result;
 import com.xuchen.controller.base.BaseController;
+import com.xuchen.core.annotation.RequestLog;
 import com.xuchen.entity.SysUser;
 import com.xuchen.entity.base.MyEntityWrapper;
 import com.xuchen.enums.UserStatusEnum;
@@ -15,6 +16,7 @@ import com.xuchen.model.base.TreeParModel;
 import com.xuchen.service.SysUserRoleService;
 import com.xuchen.service.SysUserService;
 import com.xuchen.util.MyUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("sysUser")
+@RequiresRoles("superUser")
 public class SysUserController extends BaseController {
 
     @Autowired
@@ -52,7 +55,7 @@ public class SysUserController extends BaseController {
     @RequestMapping("list")
     @ResponseBody
     Result list(BaseQuery baseQuery, SysUser myEntity, String params, HttpServletRequest request) {
-        if (params != null) {
+        if (MyUtils.isNotEmpty(params)) {
             myEntity = JSONObject.parseObject(params).toJavaObject(SysUser.class);
         }
         MyEntityWrapper wrapper = new MyEntityWrapper(baseQuery, myEntity);
@@ -69,6 +72,7 @@ public class SysUserController extends BaseController {
 
     @RequestMapping("doAdd")
     @ResponseBody
+    @RequestLog
     Result doAdd(SysUser myEntity, HttpServletRequest request) {
         myEntity.setCreateTime(new Date());
         myEntity.setCreateUser(getSessionUserId());
@@ -86,6 +90,7 @@ public class SysUserController extends BaseController {
 
     @RequestMapping("doEdit")
     @ResponseBody
+    @RequestLog
     Result doEdit(SysUser myEntity, HttpServletRequest request) {
         if (myEntity.getStatus()==null){
             myEntity.setStatus(0);
@@ -117,6 +122,7 @@ public class SysUserController extends BaseController {
 
     @RequestMapping(value = "updateUserRole",method = RequestMethod.POST)
     @ResponseBody
+    @RequestLog
     Result updateUserRole(Integer id, Integer[] ids) {
         sysUserRoleService.updateUserRole(id,ids);
         return Result.success();
@@ -124,8 +130,9 @@ public class SysUserController extends BaseController {
 
     @RequestMapping(value = "resetPwd",method = RequestMethod.POST)
     @ResponseBody
+    @RequestLog
     Result resetPwd(SysUser myEntity) {
-        myEntity.setPassword("bqcBQC123");
+        myEntity.setPassword("123456");
         MyUtils.encrypPassword(myEntity);
         sysUserService.updateById(myEntity);
         return Result.success();

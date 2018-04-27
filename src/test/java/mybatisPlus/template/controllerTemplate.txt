@@ -11,9 +11,11 @@ import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.xuchen.base.BaseCheckBox;
 import com.xuchen.base.BaseQuery;
 import com.xuchen.controller.base.BaseController;
+import com.xuchen.core.annotation.RequestLog;
 import com.xuchen.entity.@ObjEntity@;
 import com.xuchen.entity.base.MyEntityWrapper;
 import com.xuchen.service.@ClassService@;
+import com.xuchen.util.MyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +41,7 @@ public class @ClassController@ extends BaseController {
     @RequestMapping("list")
     @ResponseBody
     Result list(BaseQuery baseQuery, @ObjEntity@ myEntity, String params, HttpServletRequest request) {
-        if (params != null) {
+        if (MyUtils.isNotEmpty(params)) {
             myEntity = JSONObject.parseObject(params).toJavaObject(@ObjEntity@.class);
         }
         MyEntityWrapper wrapper = new MyEntityWrapper(baseQuery, myEntity);
@@ -50,20 +52,23 @@ public class @ClassController@ extends BaseController {
 
     @RequestMapping("editText")
     @ResponseBody
+    @RequestLog
     Result editText(@ObjEntity@ myEntity) {
         @Service@.updateById(myEntity);
         return Result.success();
     }
 
     @RequestMapping(value = "toAdd", method = RequestMethod.GET)
-    String toAdd(Integer id, HttpServletRequest request) {
+    String toAdd(HttpServletRequest request) {
         setAttributeEnums(request);
         return "@htmlPackage@/@htmlUrl@-add";
     }
 
     @RequestMapping("doAdd")
     @ResponseBody
+    @RequestLog
     Result doAdd(@ObjEntity@ myEntity) {
+//        myEntity.setCreateUser(getSessionUserName());
         @Service@.insert(myEntity);
         return Result.success();
     }
@@ -77,6 +82,7 @@ public class @ClassController@ extends BaseController {
 
     @RequestMapping("doEdit")
     @ResponseBody
+    @RequestLog
     Result doEdit(@ObjEntity@ myEntity) {
         @Service@.updateById(myEntity);
         return Result.success();
@@ -84,6 +90,7 @@ public class @ClassController@ extends BaseController {
 
     @RequestMapping("delete")
     @ResponseBody
+    @RequestLog
     Result delete(@ObjEntity@ myEntity) {
         @Service@.deleteById(myEntity);
         return Result.success();
@@ -91,6 +98,7 @@ public class @ClassController@ extends BaseController {
 
     @RequestMapping("deleteList")
     @ResponseBody
+    @RequestLog
     Result deleteList(String jsonObj) {
 //        List<@ObjEntity@> list = JSONArray.parseArray(jsonObj,@ObjEntity@.class);
 //        List<Integer> ids = new ArrayList<>();

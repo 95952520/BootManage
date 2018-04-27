@@ -18,11 +18,11 @@ public class MybatisPlusGenerate {
     /**
      * 数据库表名
      */
-    protected static String[] tableNames = {"sys_user_role"};
+    protected static String[] tableNames = {"order"};
     /**
      * 项目路径
      */
-    protected static String projectPath = "D:\\0git\\BootManage\\src\\main\\java";
+    protected static String projectPath = "D:\\git\\MyManage\\src\\main\\java";
     /**
      * 包名称
      */
@@ -30,15 +30,15 @@ public class MybatisPlusGenerate {
     /**
      * 作者
      */
-    protected static String author = "edwin";
+    protected static String author = "xuchen";
     /**
      * 生成controller通用模版(需手动微调)
      */
     protected static boolean createController = true;
 
-    protected static String dbUrl = "jdbc:mysql://localhost:3306/db";
+    protected static String dbUrl = "jdbc:mysql://localhost:3306/manage";
     protected static String dbName = "root";
-    protected static String dbPassword = "root";
+    protected static String dbPassword = "xuchen93";
     protected static String driverName = "com.mysql.jdbc.Driver";
     protected static boolean serviceNameStartWithI = false;//user -> UserService, 设置成true: user -> IUserService
 
@@ -52,10 +52,10 @@ public class MybatisPlusGenerate {
         GenerateUtil.moveMapperXmlFile(projectPath, packageName);
         for (String tableName : tableNames) {
             TableNameInfo tableNameInfo = GenerateUtil.getTableNameInfo(tableName,projectPath,packageName);
-//            if (createController) {
-//                GenerateUtil.createControllerFile(tableNameInfo,projectPath);
-//            }
-//            GenerateUtil.createHtmlFile(tableNameInfo,projectPath);
+            if (createController) {
+                GenerateUtil.createControllerFile(tableNameInfo,projectPath);
+            }
+            GenerateUtil.createHtmlFile(tableNameInfo,projectPath);
         }
     }
 

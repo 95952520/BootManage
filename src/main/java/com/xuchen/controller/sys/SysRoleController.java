@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.xuchen.base.BaseQuery;
 import com.xuchen.base.Result;
 import com.xuchen.controller.base.BaseController;
+import com.xuchen.core.annotation.RequestLog;
 import com.xuchen.entity.SysRole;
 import com.xuchen.entity.SysRoleMenu;
 import com.xuchen.entity.base.MyEntityWrapper;
@@ -18,6 +19,7 @@ import com.xuchen.service.SysMenuService;
 import com.xuchen.service.SysRoleMenuService;
 import com.xuchen.service.SysRoleService;
 import com.xuchen.util.MyUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +32,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("sysRole")
+@RequiresRoles("superUser")
 public class SysRoleController extends BaseController {
 
 
@@ -49,7 +52,7 @@ public class SysRoleController extends BaseController {
     @RequestMapping("list")
     @ResponseBody
     Result list(BaseQuery baseQuery, SysRole myEntity, String params, HttpServletRequest request) {
-        if (params != null) {
+        if (MyUtils.isNotEmpty(params)) {
             myEntity = JSONObject.parseObject(params).toJavaObject(SysRole.class);
         }
         MyEntityWrapper wrapper = new MyEntityWrapper(baseQuery, myEntity);
@@ -76,6 +79,7 @@ public class SysRoleController extends BaseController {
 
     @RequestMapping("doAdd")
     @ResponseBody
+    @RequestLog
     Result doAdd(SysRole myEntity) {
         myEntity.setUserIdCreate(getSessionUserId());
         sysRoleService.insertRoleAndMenu(myEntity);
@@ -84,6 +88,7 @@ public class SysRoleController extends BaseController {
 
     @RequestMapping("delete")
     @ResponseBody
+    @RequestLog
     Result delete(SysRole myEntity) {
         sysRoleService.deleteById(myEntity);
         return Result.success();
@@ -91,8 +96,8 @@ public class SysRoleController extends BaseController {
 
 
     @RequestMapping(value = "toRoleMenu", method = RequestMethod.GET)
-    String toRoleMenu(Integer id, HttpServletRequest request) {
-        request.setAttribute("roleId",id);
+    String toRoleMenu(Integer roleId, HttpServletRequest request) {
+        request.setAttribute("roleId",roleId);
         return "sys/role/sys-role-menu";
     }
 
@@ -122,6 +127,7 @@ public class SysRoleController extends BaseController {
 
     @RequestMapping(value = "updateRoleMenu",method = RequestMethod.POST)
     @ResponseBody
+    @RequestLog
     Result updateRoleMenu(Integer id, Integer[] ids) {
         SysRoleMenu sysRoleMenu = new SysRoleMenu();
         sysRoleMenu.setStatus(0);

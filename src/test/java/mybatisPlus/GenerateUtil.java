@@ -9,7 +9,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class GenerateUtil {
 
-    public static void createControllerFile(TableNameInfo tableNameInfo,String projectPath) throws Exception {
+    public static void createControllerFile(TableNameInfo tableNameInfo, String projectPath) throws Exception {
         List<String> urlList = FileUtils.readLines(new File(projectPath.replace("src\\main\\java", "src\\test\\java") + "\\mybatisPlus\\template\\controllerTemplate.txt"));
         List<String> result = new ArrayList<>();
         for (String s : urlList) {
@@ -49,7 +49,7 @@ public class GenerateUtil {
     /**
      * 生成htmlFile文件
      */
-    public static void createHtmlFile(TableNameInfo tableNameInfo,String projectPath) throws Exception {
+    public static void createHtmlFile(TableNameInfo tableNameInfo, String projectPath) throws Exception {
         //list.txt
         List<String> urlList = FileUtils.readLines(new File(projectPath.replace("src\\main\\java", "src\\test\\java") + "\\mybatisPlus\\template\\listTemplate.txt"));
         List<String> result = new ArrayList<>();
@@ -113,7 +113,7 @@ public class GenerateUtil {
         return sb.toString();
     }
 
-    public static TableNameInfo getTableNameInfo(String tableName,String projectPath,String packageName) {
+    public static TableNameInfo getTableNameInfo(String tableName, String projectPath, String packageName) {
         TableNameInfo tableNameInfo = new TableNameInfo();
         tableNameInfo.setEntityName(GenerateUtil.toJavaName(true, tableName));
         tableNameInfo.setEntityObjName(GenerateUtil.toJavaName(false, tableName));

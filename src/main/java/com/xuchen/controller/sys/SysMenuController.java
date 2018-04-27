@@ -5,10 +5,13 @@ import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.xuchen.base.BaseQuery;
 import com.xuchen.base.Result;
 import com.xuchen.controller.base.BaseController;
+import com.xuchen.core.annotation.RequestLog;
 import com.xuchen.entity.SysMenu;
 import com.xuchen.entity.base.MyEntityWrapper;
 import com.xuchen.model.ParentMenu;
 import com.xuchen.service.SysMenuService;
+import com.xuchen.util.MyUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("sysMenu")
+@RequiresRoles("superUser")
 public class SysMenuController extends BaseController {
 
 
@@ -37,7 +41,7 @@ public class SysMenuController extends BaseController {
     @RequestMapping("list")
     @ResponseBody
     Result list(BaseQuery baseQuery, SysMenu myEntity, String params, HttpServletRequest request) {
-        if (params != null) {
+        if (MyUtils.isNotEmpty(params)) {
             myEntity = JSONObject.parseObject(params).toJavaObject(SysMenu.class);
         }
         MyEntityWrapper wrapper = new MyEntityWrapper(baseQuery, myEntity);
@@ -59,6 +63,7 @@ public class SysMenuController extends BaseController {
 
     @RequestMapping("doAdd")
     @ResponseBody
+    @RequestLog
     Result doAdd(SysMenu myEntity, HttpServletRequest request) {
        // sysMenuService.insert(myEntity);
         sysMenuService.insertRoleAndMenu(myEntity);
@@ -81,6 +86,7 @@ public class SysMenuController extends BaseController {
 
     @RequestMapping("doEdit")
     @ResponseBody
+    @RequestLog
     Result doEdit(SysMenu myEntity, HttpServletRequest request) {
         sysMenuService.updateById(myEntity);
         return Result.success();
@@ -88,6 +94,7 @@ public class SysMenuController extends BaseController {
 
     @RequestMapping("delete")
     @ResponseBody
+    @RequestLog
     Result delete(SysMenu myEntity, HttpServletRequest request) {
         sysMenuService.deleteMenuById(myEntity.getMenuId());
         return Result.success();

@@ -8,9 +8,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/nbcsgo?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://xxxx:3306/boot_manage?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull
     username: root
-    password: root
+    password: xxxx
     type: com.alibaba.druid.pool.DruidDataSource
     filters: stat
     maxActive: 20
@@ -27,9 +27,9 @@ spring:
     maxOpenPreparedStatements: 20
   redis:
     database: 0
-    hostName: localhost
+    hostName: xxxx
     port: 6379
-    password: pwd
+    password: xxxx
     timeout: 5000
     pool:
       max-active: 9
